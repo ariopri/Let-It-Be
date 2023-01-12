@@ -16,86 +16,58 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { register } from '../../redux/reducer/registerReducer';
 import { Toast } from '../../components/02-Reusable/Toast/Toast';
-import { register } from '../../redux/action/registerAction';
+import { useCallback } from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 
-import {
-  emailValidator,
-  firstnameValidator,
-  lastnameValidator,
-} from '../../utils/validasiRegex';
-
-export default function Register(props) {
+export default function Daftar() {
   const color = useColorModeValue('white', 'black');
   const bg = useColorModeValue('accentLight.400', 'accentDark.400');
   const hoverBg = useColorModeValue('accentLight.500', 'accentDark.500');
-  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.register.isLoading);
   const [passwordType, setPasswordType] = useState(false);
   const [formData, setFormData] = useState({
-    firstname: '',
-    lastname: '',
+    nama_depan: '',
+    nama_belakang: '',
     email: '',
     password: '',
-    konfirmasiPassword: '',
+    phone: '',
   });
-  const isLoading = useSelector((state) => state.register.isLoading);
 
-  const handleInputChange = useCallback((event) => {
-    const { name, value } = event.target;
-    setFormData((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
-  }, []);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-      const { firstname, lastname, email, password, konfirmasiPassword } =
-        formData;
-      if (!firstnameValidator(firstname)) {
-        Toast.fire({
-          icon: 'warning',
-          title: 'Nama depan tidak boleh mengandung angka',
-        });
-        return;
-      }
-      if (!lastnameValidator(lastname)) {
-        Toast.fire({
-          icon: 'warning',
-          title: 'Nama belakang tidak boleh mengandung angka',
-        });
-        return;
-      }
-      if (!emailValidator(email)) {
-        Toast.fire({
-          icon: 'warning',
-          title: 'Harap masukkan email yang benar',
-        });
-        return;
-      }
-
-      if (password !== konfirmasiPassword) {
-        Toast.fire({
-          icon: 'warning',
-          title: 'Password tidak sama',
-        });
-        return;
-      }
-
-      dispatch(
-        register(firstname, lastname, email, password, konfirmasiPassword)
-      );
-
-      if (props.history) {
-        props.history.push('/login');
-      }
+  const handleInputChange = useCallback(
+    (e) => {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
     },
-    [dispatch, formData, props.history]
+    [formData]
   );
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await dispatch(register(formData)).unwrap();
+      navigate('/masuk', { replace: true });
+      Toast.fire({
+        icon: 'success',
+        title: 'Berhasil mendaftar',
+      });
+    } catch (error) {
+      console.log(error);
+      Toast.fire({
+        icon: 'error',
+        title: 'Gagal mendaftar',
+      });
+    }
+  };
 
   return (
     <Container>
@@ -174,9 +146,9 @@ export default function Register(props) {
                         <FormLabel>Nama Depan</FormLabel>
                         <Input
                           type="text"
-                          id="firstname"
-                          name="firstname"
-                          value={formData.firstname}
+                          id="nama_depan"
+                          name="nama_depan"
+                          value={formData.nama_depan}
                           onChange={handleInputChange}
                           focusBorderColor={bg}
                         />
@@ -187,9 +159,9 @@ export default function Register(props) {
                         <FormLabel>Nama Belakang</FormLabel>
                         <Input
                           type="text"
-                          id="lastname"
-                          name="lastname"
-                          value={formData.lastname}
+                          id="nama_belakang"
+                          name="nama_belakang"
+                          value={formData.nama_belakang}
                           onChange={handleInputChange}
                           focusBorderColor={bg}
                         />
