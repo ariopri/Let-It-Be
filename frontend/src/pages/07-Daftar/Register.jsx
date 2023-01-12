@@ -16,7 +16,7 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { register } from '../../redux/reducer/registerReducer';
+import { register } from '../../redux//slice/register';
 import { Toast } from '../../components/02-Reusable/Toast/Toast';
 import { useCallback } from 'react';
 import { useState } from 'react';
