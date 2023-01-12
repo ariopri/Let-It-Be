@@ -12,17 +12,19 @@ import {
   Text,
   Image,
   Heading,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Avatar,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
-import { Link as LinkTo } from 'react-router-dom';
-
-const Links = [
-  { nama: 'Modul', link: '/modul' },
-  { nama: 'Hubungi', link: '/hubungi' },
-  { nama: 'Tentang', link: '/tentang' },
-  { nama: 'Informasi', link: '/informasi' },
-];
+import { HamburgerIcon, CloseIcon, RepeatClockIcon } from '@chakra-ui/icons';
+import { MoonIcon, SunIcon, ArrowBackIcon } from '@chakra-ui/icons';
+import { Link as LinkTo, useNavigate } from 'react-router-dom';
+import useLoginState from '../../../zustand/todoLogin';
+import { useState, useEffect, useCallback } from 'react';
+import { BASE_URL } from '../../../api/api';
+import axios from 'axios';
 
 const NavLink = ({ nama, link, onClick }) => (
   <Text
@@ -43,6 +45,19 @@ const NavLink = ({ nama, link, onClick }) => (
 );
 
 export default function NavigationBar() {
+  const [user, setUser] = useState({});
+  const navigate = useNavigate();
+  const { isLoggedIn, setIsLoggedOut, loggedAs, setLoggedAs, setUserId } =
+    useLoginState();
+  const Links = [
+    { nama: 'Modul', link: '/modul' },
+    { nama: 'Hubungi', link: '/hubungi' },
+    {
+      nama: isLoggedIn ? 'Event' : 'Tentang',
+      link: isLoggedIn ? '/event' : '/tentang',
+    },
+    { nama: 'Informasi', link: '/informasi' },
+  ];
   const bgnavbar = useColorModeValue(
     'rgba(255, 255, 255, 0.8)',
     'rgba(26, 32, 44, 0.8)'
@@ -56,6 +71,28 @@ export default function NavigationBar() {
       bg: useColorModeValue('accentLight.500', 'accentDark.500'),
     },
   };
+  const HandleLogOut = () => {
+    setLoggedAs('');
+    setUserId('');
+    setIsLoggedOut();
+    navigate('/');
+    useLoginState.persist.clearStorage();
+    localStorage.removeItem('tokenId');
+  };
+
+  const getUser = useCallback(async () => {
+    const headers = {
+      Authorization: 'Bearer ' + localStorage.getItem('tokenId'),
+    };
+    const res = await axios.get(`${BASE_URL}/${loggedAs}/${user}`, {
+      headers,
+    });
+    setUser(res.data);
+  }, [user, loggedAs]);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
 
   return (
     <Box
@@ -135,10 +172,54 @@ export default function NavigationBar() {
               mr={4}
               onClick={toggleColorMode}
             />
+            {isLoggedIn ? (
+              <Flex alignItems={'center'}>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded={'full'}
+                    variant={'link'}
+                    cursor={'pointer'}
+                    minW={0}
+                  >
+                    {/* <Avatar size={'sm'} name={``} /> */}
+                    <h1
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                      }}
+                    >
+                      <Avatar size={'sm'} />
+                      Hi, Madara
+                    </h1>
+                  </MenuButton>
 
-            <Button as={LinkTo} to="/masuk" size={'sm'} {...navbarSet}>
+                  <MenuList>
+                    <MenuItem
+                      as={LinkTo}
+                      to={'dashboard/transaksi'}
+                      icon={<RepeatClockIcon />}
+                    >
+                      Riwayat Transaksi
+                    </MenuItem>
+                    <MenuItem
+                      icon={<ArrowBackIcon />}
+                      onClick={() => HandleLogOut()}
+                    >
+                      Keluar
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </Flex>
+            ) : (
+              <Button as={LinkTo} to="/masuk" size={'sm'} {...navbarSet}>
+                MASUK
+              </Button>
+            )}
+            {/* <Button as={LinkTo} to="/masuk" size={'sm'} {...navbarSet}>
               MASUK
-            </Button>
+            </Button> */}
           </Flex>
         </Flex>
       </Container>
