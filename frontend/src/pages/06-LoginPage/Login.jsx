@@ -26,10 +26,10 @@ import useLoginState from '../../zustand/todoLogin';
 
 export default function Login(props) {
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn, setUserId } = useLoginState();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const { isLoggedIn, setIsLoggedIn, setUserId, setDataId, setToken } =
+    useLoginState();
   const [passwordType, setPasswordType] = useState(false);
 
   const HandleSubmit = async (e) => {
@@ -53,9 +53,12 @@ export default function Login(props) {
           icon: 'success',
           title: 'Berhasil Masuk',
         });
-        const UserID = response?.data?.user;
+        const UserID = response?.data?.UserId;
         setUserId(UserID);
+        const dataId = response?.data?.dataId;
+        setDataId(dataId);
         const accessToken = response?.data?.token;
+        setToken(accessToken);
         localStorage.setItem('token', accessToken);
       })
       .catch((error) => {
