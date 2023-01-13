@@ -96,13 +96,12 @@ func RegisterAdmin(c *gin.Context) {
 	//return message success
 	c.JSON(200, gin.H{"message": "success"})
 }
-
 func Login(c *gin.Context) {
-	//get data input from struct LoginInput
+	//get data input from sdatabasetruct LoginInput
 	var input LoginInput
 	//check if data input is valid
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	//create new user from struct LoginInput to check login with function Login
@@ -113,20 +112,21 @@ func Login(c *gin.Context) {
 		Password: input.Password,
 	}
 	//check if user is valid with function Login from models user.go
-	token, err := models.Login(user.Email, user.Password)
+	token, userID, dataID, err := models.Login(user.Email, user.Password)
 	if err != nil {
 		//if user is not valid, return message error
-		c.JSON(400, gin.H{"error": "Invalid email or password"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email or password"})
 		return
 	}
 	//if user is valid, return token
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"message": "Berhasil Login",
 		"token":   token,
-		"UserId":  user.ID,
-		"dataId":  user.NamaDepan,
+		"UserId":  userID,
+		"dataId":  dataID,
 	})
 }
+
 func CurrentUser(c *gin.Context) {
 	//get token from header Authorization
 	user_id, err := token.ExtractTokenID(c)

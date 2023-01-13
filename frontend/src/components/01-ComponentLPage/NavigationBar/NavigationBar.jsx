@@ -46,9 +46,21 @@ const NavLink = ({ nama, link, onClick }) => (
 
 export default function NavigationBar() {
   const [user, setUser] = useState({});
+  const [data, setData] = useState({});
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedOut, loggedAs, setLoggedAs, setUserId } =
-    useLoginState();
+  const {
+    isLoggedIn,
+    setIsLoggedOut,
+    userId,
+    setUserId,
+    dataId,
+    setDataId,
+    message,
+    setMessage,
+    token,
+    setToken,
+  } = useLoginState();
+
   const Links = [
     { nama: 'Modul', link: '/modul' },
     { nama: 'Hubungi', link: '/hubungi' },
@@ -63,6 +75,7 @@ export default function NavigationBar() {
     'rgba(26, 32, 44, 0.8)'
   );
   const { colorMode, toggleColorMode } = useColorMode();
+  const color = useColorModeValue('black', 'white');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navbarSet = {
     color: useColorModeValue('white', 'black'),
@@ -72,8 +85,10 @@ export default function NavigationBar() {
     },
   };
   const HandleLogOut = () => {
-    setLoggedAs('');
     setUserId('');
+    setDataId('');
+    setMessage('');
+    setToken('');
     setIsLoggedOut();
     navigate('/');
     useLoginState.persist.clearStorage();
@@ -84,15 +99,28 @@ export default function NavigationBar() {
     const headers = {
       Authorization: 'Bearer ' + localStorage.getItem('tokenId'),
     };
-    const res = await axios.get(`${BASE_URL}/${loggedAs}/${user}`, {
+    const res = await axios.get(`${BASE_URL}/user/${userId}`, {
       headers,
     });
     setUser(res.data);
-  }, [user, loggedAs]);
+  }, [userId]);
+
+  const getData = useCallback(async () => {
+    const headers = {
+      Authorization: 'Bearer ' + localStorage.getItem('tokenId'),
+    };
+    const res = await axios.get(`${BASE_URL}/data/${dataId}`, {
+      headers,
+    });
+    setData(res.data);
+  }, [dataId]);
 
   useEffect(() => {
-    getUser();
-  }, [getUser]);
+    if (isLoggedIn) {
+      getUser();
+      getData();
+    }
+  }, [isLoggedIn, getUser, getData]);
 
   return (
     <Box
@@ -182,17 +210,18 @@ export default function NavigationBar() {
                     cursor={'pointer'}
                     minW={0}
                   >
-                    {/* <Avatar size={'sm'} name={``} /> */}
-                    <h1
+                    <Box
                       style={{
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',
                       }}
                     >
-                      <Avatar size={'sm'} />
-                      Hi, Madara
-                    </h1>
+                      <Avatar size={'sm'} name={dataId} />
+                      <Text color={color}>
+                        Hi, {dataId.charAt(0).toUpperCase() + dataId.slice(1)}
+                      </Text>
+                    </Box>
                   </MenuButton>
 
                   <MenuList>

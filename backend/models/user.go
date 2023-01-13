@@ -31,27 +31,28 @@ func SaveUser(user *User) {
 	// Insert the user into the database
 	DB.Exec("INSERT INTO users (email, password, role, nama_depan, nama_belakang, phone) VALUES (?, ?, ?, ?, ?, ?)", user.Email, user.Password, user.Role, user.NamaDepan, user.NamaBelakang, user.Phone)
 }
-func Login(email, password string) (string, error) {
+func Login(email, password string) (string, uint, string, error) {
 	// Get the user from the database
 	var user User
 	// Get the user from the database with the email
-	err := DB.QueryRow("SELECT * FROM users WHERE email = ?", email).Scan(&user.ID, &user.Email, &user.Password, &user.Role, &user.NamaDepan, &user.NamaBelakang, &user.Phone)
+	err := DB.QueryRow("SELECT id, email, password, role, nama_depan, nama_belakang, phone FROM users WHERE email = ?", email).Scan(&user.ID, &user.Email, &user.Password, &user.Role, &user.NamaDepan, &user.NamaBelakang, &user.Phone)
 	if err != nil {
-		return "", err
+		return "", 0, "", err
 	}
 	// Check if the password is correct and return the token
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return "", err
+		return "", 0, "", err
 	}
 	// Create a token with user id , user email and user role and return it
 	token, err := token.GenerateToken(user.ID, user.Email, user.Role)
 	if err != nil {
-		return "", err
+		return "", 0, "", err
 	}
 	// Return the token
-	return token, nil
+	return token, user.ID, user.NamaDepan, nil
 }
+
 func GetUserID(id uint) (User, error) {
 	// Get the user from the database
 	var user User

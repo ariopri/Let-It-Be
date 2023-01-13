@@ -9,6 +9,7 @@ import Register from './pages/07-Daftar/Register';
 import CaraMendafatarPengajar from './pages/08-DaftarPengajar/CaraDaftarPengajar';
 import Protected from './protected/protectedRoute';
 import Login from './pages/06-LoginPage/Login';
+import Siswa from './pages/09-ModulPage/Modul';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="tentang" element={<About />} />
         <Route element={<Protected />}>
           <Route path="modul" element={<Modul />} />
+          {/* <Route path="modul" element={<Siswa />} /> */}
         </Route>
         <Route path="masuk" element={<Login />} />
         <Route path="mendaftar" element={<Register />} />

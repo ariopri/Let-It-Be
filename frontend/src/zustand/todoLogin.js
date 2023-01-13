@@ -3,14 +3,18 @@ import { devtools, persist } from 'zustand/middleware';
 
 const useLoginState = create(
   persist(
-    devtools((set, get) => ({
+    devtools((set) => ({
       isLoggedIn: false,
       userId: '',
-      loggedAs: '',
+      dataId: '',
+      message: '',
+      token: '',
       setIsLoggedIn: () => set({ isLoggedIn: true }),
       setIsLoggedOut: () => set({ isLoggedIn: false }),
       setUserId: (id) => set({ userId: id }),
-      setLoggedAs: (user) => set({ loggedAs: user }),
+      setDataId: (dataId) => set({ dataId: dataId }),
+      setMessage: (message) => set({ message: message }),
+      setToken: (token) => set({ token: token }),
     })),
     {
       name: 'client',
