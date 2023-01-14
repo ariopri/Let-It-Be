@@ -9,14 +9,33 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useCallback, useState } from 'react';
 import { Link as LinkTo } from 'react-router-dom';
+import { BASE_URL } from '../../../api/api';
 import useLoginState from '../../../zustand/todoLogin';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 export default function Hero() {
-  const { isLoggedIn } = useLoginState();
-  const color = useColorModeValue('white', 'black');
+  const { isLoggedIn, dataId } = useLoginState();
+  const [user, setUser] = useState({});
+  const color = useColorModeValue('black', 'white');
   const bacg = useColorModeValue('accentLight.400', 'accentDark.400');
   const hoverBg = useColorModeValue('accentLight.500', 'accentDark.500');
+
+  const getUser = useCallback(async () => {
+    const headers = {
+      Authorization: 'Bearer ' + localStorage.getItem('tokenId'),
+    };
+    const res = await axios.get(`${BASE_URL}/${dataId}`, {
+      headers,
+    });
+    setUser(res.data);
+  }, [dataId]);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
   return (
     <Stack
       as={Container}
@@ -38,11 +57,18 @@ export default function Hero() {
               fontWeight={600}
             >
               <Text fontSize={{ base: '2xl', md: '3xl', lg: '3xl' }}>
-                Selamat Datang, Madara
+                Selamat Datang,{' '}
+                {`${
+                  dataId.nama_depan.charAt(0).toUpperCase() +
+                  dataId.nama_depan.slice(1)
+                } ${
+                  dataId.nama_belakang.charAt(0).toUpperCase() +
+                  dataId.nama_belakang.slice(1)
+                }`}
               </Text>
-              <Text fontSize={'md'} color={'gray.700'} align="justify">
-                Let It Be Akan Membantumu Mempersiapkan Diri Untuk Tes Masuk
-                Perguruan Tinggi.
+              <Text fontSize={'md'} color={color} align="justify">
+                Let It Be Akan Membantumu Mempersiapkan Diri Untuk Masuk
+                Perguruan Tinggi Impian Mu.
               </Text>
             </Heading>
             <Stack

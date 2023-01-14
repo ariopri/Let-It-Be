@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
   Image,
+  Avatar,
 } from '@chakra-ui/react';
 import useLoginState from '../../../zustand/todoLogin';
 
@@ -78,13 +79,12 @@ export default function Features() {
               py="8"
               data-aos={subject.animation}
             >
-              <Image
+              <Avatar
                 src={subject.image}
-                w={64}
-                h={64}
-                rounded="full"
-                object-fit="cover"
-                style={{ maxWidth: '100%', height: 'auto' }}
+                width={'100px'}
+                alignSelf={'center'}
+                m={{ base: '0 0 30px 0', md: '20px 20px 0 10px' }}
+                height={'100px'}
               />
               <Text
                 fontSize={{ base: '18', md: '24' }}
