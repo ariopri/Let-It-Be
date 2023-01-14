@@ -1,6 +1,8 @@
 package models
 
 import (
+	"context"
+
 	"github.com/ariopri/Let-It-Be/tree/main/backend/utils/token"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -13,6 +15,16 @@ type User struct {
 	NamaDepan    string `json:"nama_depan"`
 	NamaBelakang string `json:"nama_belakang"`
 	Phone        string `json:"phone"`
+}
+
+type UserRepository interface {
+	GetAll(ctx context.Context) ([]User, error)
+	Store(ctx context.Context, user *User) (User, error)
+	GetByRole(ctx context.Context, role string) ([]User, error)
+	GetById(ctx context.Context, id uint) (User, error)
+	Update(ctx context.Context, id uint, user *User) (User, error)
+	UpdateRole(ctx context.Context, id uint, user *User) (User, error)
+	Delete(ctx context.Context, id uint) error
 }
 
 // HashPassword hashes the user's password. and send it to function SaveUser
@@ -31,26 +43,26 @@ func SaveUser(user *User) {
 	// Insert the user into the database
 	DB.Exec("INSERT INTO users (email, password, role, nama_depan, nama_belakang, phone) VALUES (?, ?, ?, ?, ?, ?)", user.Email, user.Password, user.Role, user.NamaDepan, user.NamaBelakang, user.Phone)
 }
-func Login(email, password string) (string, uint, string, error) {
+func Login(email, password string) (string, uint, string, string, string, error) {
 	// Get the user from the database
 	var user User
 	// Get the user from the database with the email
 	err := DB.QueryRow("SELECT id, email, password, role, nama_depan, nama_belakang, phone FROM users WHERE email = ?", email).Scan(&user.ID, &user.Email, &user.Password, &user.Role, &user.NamaDepan, &user.NamaBelakang, &user.Phone)
 	if err != nil {
-		return "", 0, "", err
+		return "", 0, "", "", "", err
 	}
 	// Check if the password is correct and return the token
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return "", 0, "", err
+		return "", 0, "", "", "", err
 	}
 	// Create a token with user id , user email and user role and return it
 	token, err := token.GenerateToken(user.ID, user.Email, user.Role)
 	if err != nil {
-		return "", 0, "", err
+		return "", 0, "", "", "", err
 	}
 	// Return the token
-	return token, user.ID, user.NamaDepan, nil
+	return token, user.ID, user.NamaDepan, user.NamaBelakang, user.Role, nil
 }
 
 func GetUserID(id uint) (User, error) {

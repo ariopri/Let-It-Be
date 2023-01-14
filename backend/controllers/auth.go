@@ -9,6 +9,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type DataUser struct {
+	NamaDepan    string `json:"nama_depan"`
+	NamaBelakang string `json:"nama_belakang"`
+	Role         string `json:"role"`
+}
+
 type RegisterInput struct {
 	Email        string `json:"email"`
 	Password     string `json:"password"`
@@ -59,8 +65,8 @@ func Register(c *gin.Context) {
 		NamaBelakang: input.NamaBelakang,
 		//set Phone with data from input Phone
 		Phone: input.Phone,
-		//set Role with string client
-		Role: "client",
+		//set Role with string siswa
+		Role: "siswa",
 	}
 	//save user to database with function SaveUser from models user.go
 	models.SaveUser(&user)
@@ -112,18 +118,23 @@ func Login(c *gin.Context) {
 		Password: input.Password,
 	}
 	//check if user is valid with function Login from models user.go
-	token, userID, dataID, err := models.Login(user.Email, user.Password)
+	token, userID, firstName, lastName, role, err := models.Login(user.Email, user.Password)
 	if err != nil {
 		//if user is not valid, return message error
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email or password"})
 		return
+	}
+	dataUser := DataUser{
+		NamaDepan:    firstName,
+		NamaBelakang: lastName,
+		Role:         role,
 	}
 	//if user is valid, return token
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Berhasil Login",
 		"token":   token,
 		"UserId":  userID,
-		"dataId":  dataID,
+		"dataId":  dataUser,
 	})
 }
 

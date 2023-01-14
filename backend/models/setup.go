@@ -17,7 +17,7 @@ func ConnectDatabase() {
 	}
 
 	// Create the table if it doesn't exist
-	_, err = DB.Exec("CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, email VARCHAR(255), password VARCHAR(255), role VARCHAR(255), nama_depan VARCHAR(255), nama_belakang VARCHAR(255), phone VARCHAR(255))")
+	_, err = DB.Exec("CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, email VARCHAR(255), password VARCHAR(255), role VARCHAR(255), nama_depan VARCHAR(255), nama_belakang VARCHAR(255), phone VARCHAR(255), created_at DATETIME, updated_at DATETIME)")
 	if err != nil {
 		panic(err)
 	}

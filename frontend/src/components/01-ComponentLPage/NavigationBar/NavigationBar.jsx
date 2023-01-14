@@ -95,21 +95,11 @@ export default function NavigationBar() {
     localStorage.removeItem('tokenId');
   };
 
-  const getUser = useCallback(async () => {
-    const headers = {
-      Authorization: 'Bearer ' + localStorage.getItem('tokenId'),
-    };
-    const res = await axios.get(`${BASE_URL}/user/${userId}`, {
-      headers,
-    });
-    setUser(res.data);
-  }, [userId]);
-
   const getData = useCallback(async () => {
     const headers = {
       Authorization: 'Bearer ' + localStorage.getItem('tokenId'),
     };
-    const res = await axios.get(`${BASE_URL}/data/${dataId}`, {
+    const res = await axios.get(`${BASE_URL}/user/${dataId}`, {
       headers,
     });
     setData(res.data);
@@ -117,10 +107,9 @@ export default function NavigationBar() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      getUser();
       getData();
     }
-  }, [isLoggedIn, getUser, getData]);
+  }, [isLoggedIn, getData]);
 
   return (
     <Box
@@ -217,9 +206,16 @@ export default function NavigationBar() {
                         gap: '8px',
                       }}
                     >
-                      <Avatar size={'sm'} name={dataId} />
+                      <Avatar
+                        size={'sm'}
+                        name={`${dataId.nama_depan} ${dataId.nama_belakang}`}
+                      />
                       <Text color={color}>
-                        Hi, {dataId.charAt(0).toUpperCase() + dataId.slice(1)}
+                        Hi,{' '}
+                        {`${
+                          dataId.nama_depan.charAt(0).toUpperCase() +
+                          dataId.nama_depan.slice(1)
+                        }`}
                       </Text>
                     </Box>
                   </MenuButton>

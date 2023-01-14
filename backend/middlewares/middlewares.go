@@ -36,7 +36,7 @@ func JwtAuthMiddlewareAdmin() gin.HandlerFunc {
 			return
 		}
 		// If the user is found, check if the user is an admin
-		if u.Role != "admin" {
+		if u.Role != "mentor" {
 			// If the user is not an admin, return an error
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "you are not admin"})
 			c.Abort()
@@ -73,7 +73,7 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 		// If the user is found , check if the user is client
-		if u.Role != "client" {
+		if u.Role != "siswa" {
 			// If the user is not an client, return an error
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "you are not user"})
 			c.Abort()
