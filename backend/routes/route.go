@@ -5,10 +5,19 @@ import (
 	"time"
 
 	"github.com/ariopri/Let-It-Be/tree/main/backend/controllers"
+	kursusRepo "github.com/ariopri/Let-It-Be/tree/main/backend/kursus/repository"
+	kursusUseCase "github.com/ariopri/Let-It-Be/tree/main/backend/kursus/usecase"
 	"github.com/ariopri/Let-It-Be/tree/main/backend/middlewares"
 	"github.com/ariopri/Let-It-Be/tree/main/backend/models"
+	userRepo "github.com/ariopri/Let-It-Be/tree/main/backend/users/repository"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
+	kursusHandler "github.com/ariopri/Let-It-Be/tree/main/backend/kursus/handler"
+	userHandler "github.com/ariopri/Let-It-Be/tree/main/backend/users/delivery/http"
+
+	authHandler "github.com/ariopri/Let-It-Be/tree/main/backend/controllers/auth/delivery/http"
+	authRepo "github.com/ariopri/Let-It-Be/tree/main/backend/controllers/auth/repository"
 )
 
 func SetupRoutes() *gin.Engine {
@@ -41,5 +50,18 @@ func SetupRoutes() *gin.Engine {
 	admin.Use(middlewares.JwtAuthMiddlewareAdmin())
 	admin.GET("/user", controllers.CurrentUser)
 	admin.PUT("/update/profile", controllers.UpdateProfile)
+
+	//=============================Middlewares for Auth======================================================
+	authRepo := authRepo.NewAuthRepo(models.DB)
+	authHandler.NewAuthHandler(r, authRepo)
+	//=============================Middlewares for Kursus======================================================
+	ctxTimeout := time.Duration(2) * time.Second
+	userRepo := userRepo.NewUserRepo(models.DB)
+	userHandler.NewSiswaHandler(r, userRepo)
+
+	kursusRepo := kursusRepo.NewKursusRepo(models.DB)
+	kursusUseCase := kursusUseCase.NewKursusUseCase(kursusRepo, userRepo, ctxTimeout)
+	kursusHandler.NewKursusHandler(r, kursusUseCase)
+
 	return r
 }
