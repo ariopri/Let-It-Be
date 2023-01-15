@@ -34,6 +34,9 @@ func SetupRoutes() *gin.Engine {
 	r.GET("/informasi", func(c *gin.Context) {
 		c.JSON(http.StatusOK, models.InformasiData)
 	})
+	r.GET("/modul", func(c *gin.Context) {
+		c.JSON(http.StatusOK, models.InformasiKelas)
+	})
 	public := r.Group("/")
 	public.POST("/register", controllers.Register)
 	public.POST("/login", controllers.Login)
