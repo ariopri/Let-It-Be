@@ -16,7 +16,7 @@ const subjectList = [
     name: 'Matematika',
     image:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBlgmT1cKrgLGs858d51J2Oh2zWrZkgGGXCA&usqp=CAU',
-    color: 'linear(to-b, rgba(246, 92, 139, 1), rgba(246, 92, 139, 1))',
+    color: 'linear(to-b, rgba(255, 0, 0, 1), rgba(255, 0, 0, 1))',
     animation: 'fade-right',
   },
   {
