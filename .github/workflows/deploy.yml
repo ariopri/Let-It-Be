@@ -1,0 +1,45 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy-react:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          cd frontend
+          yarn install
+      - name: Build React App
+        run: |
+          cd frontend
+          yarn build
+      - name: Deploy React to Netlify
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          REACT_APP_LEITBE: ${{ secrets.REACT_APP_LEITBE }}
+          REACT_APP_LEITBE_URL: ${{ secrets.REACT_APP_LEITBE_URL }}
+          REACT_APP_LEITBE_API_URL: ${{ secrets.REACT_APP_LEITBE_API_URL }}
+
+  deploy-go:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check code
+        uses: actions/checkout@v2
+      - name: Build Go App
+        run: |
+          cd backend
+          go build
+      - name: Deploy Go to Heroku
+        run: |
+          cd backend
+          heroku deploy
