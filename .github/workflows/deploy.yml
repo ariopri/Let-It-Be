@@ -3,22 +3,30 @@ name: Deployment
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
-  deploy-go:
+deploy-go:
     runs-on: ubuntu-latest
     steps:
-      - name: Check code
-        uses: actions/checkout@v2
-      - name: Build Go App
-        run: |
-          cd backend
-          go build
-      - name: Deploy Go to Heroku
-        run: |
-          cd backend
-          heroku deploy
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+    - name: Build Go App
+      run: |
+        cd backend
+        go build
+    - name: Set up Railway CLI
+      uses: railway-actions/cli-setup@v1
+      with:
+        railway_token: ${{ secrets.RAILWAY_TOKEN }}
+    - name: Deploy Go to Railway
+      run: railway deploy --app-name letitbe
+    env:
+      RAILWAY_APP_NAME: letitbe
 
   deploy-react:
     runs-on: ubuntu-latest
