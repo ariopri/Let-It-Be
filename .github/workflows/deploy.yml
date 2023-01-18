@@ -6,6 +6,20 @@ on:
       - dev
 
 jobs:
+  deploy-go:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check code
+        uses: actions/checkout@v2
+      - name: Build Go App
+        run: |
+          cd backend
+          go build
+      - name: Deploy Go to Heroku
+        run: |
+          cd backend
+          heroku deploy
+
   deploy-react:
     runs-on: ubuntu-latest
     steps:
@@ -29,17 +43,3 @@ jobs:
           REACT_APP_LEITBE: ${{ secrets.REACT_APP_LEITBE }}
           REACT_APP_LEITBE_URL: ${{ secrets.REACT_APP_LEITBE_URL }}
           REACT_APP_LEITBE_API_URL: ${{ secrets.REACT_APP_LEITBE_API_URL }}
-
-  deploy-go:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check code
-        uses: actions/checkout@v2
-      - name: Build Go App
-        run: |
-          cd backend
-          go build
-      - name: Deploy Go to Heroku
-        run: |
-          cd backend
-          heroku deploy
