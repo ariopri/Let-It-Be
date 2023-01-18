@@ -30,7 +30,7 @@ export default function HubungiKami() {
   };
 
   const buttonstyle = {
-    color: useColorModeValue('black', 'black'),
+    color: useColorModeValue('black', 'white'),
     bg: useColorModeValue('blue.100', 'blue.900'),
     _hover: {
       bg: useColorModeValue('accentLight.500', 'accentDark.500'),

@@ -18,13 +18,14 @@ import {
   MenuItem,
   Avatar,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, RepeatClockIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
 import { MoonIcon, SunIcon, ArrowBackIcon } from '@chakra-ui/icons';
 import { Link as LinkTo, useNavigate } from 'react-router-dom';
 import useLoginState from '../../../zustand/todoLogin';
 import { useState, useEffect, useCallback } from 'react';
-import { BASE_URL } from '../../../api/api';
+import { ENDPOINT_API_POST_USER } from '../../../api/api';
 import axios from 'axios';
+import { Toast } from '../../02-Reusable/Toast/Toast';
 
 const NavLink = ({ nama, link, onClick }) => (
   <Text
@@ -45,19 +46,15 @@ const NavLink = ({ nama, link, onClick }) => (
 );
 
 export default function NavigationBar() {
-  const [user, setUser] = useState({});
-  const [data, setData] = useState({});
+  const [, setData] = useState({});
   const navigate = useNavigate();
   const {
     isLoggedIn,
     setIsLoggedOut,
-    userId,
     setUserId,
     dataId,
     setDataId,
-    message,
     setMessage,
-    token,
     setToken,
   } = useLoginState();
 
@@ -78,7 +75,7 @@ export default function NavigationBar() {
   const color = useColorModeValue('black', 'white');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navbarSet = {
-    color: useColorModeValue('white', 'black'),
+    color: useColorModeValue('black', 'white'),
     bg: useColorModeValue('accentLight.400', 'accentDark.400'),
     _hover: {
       bg: useColorModeValue('accentLight.500', 'accentDark.500'),
@@ -93,13 +90,17 @@ export default function NavigationBar() {
     navigate('/');
     useLoginState.persist.clearStorage();
     localStorage.removeItem('tokenId');
+    Toast.fire({
+      icon: 'success',
+      title: 'Berhasil Keluar',
+    });
   };
 
   const getData = useCallback(async () => {
     const headers = {
       Authorization: 'Bearer ' + localStorage.getItem('tokenId'),
     };
-    const res = await axios.get(`${BASE_URL}/user/${dataId}`, {
+    const res = await axios.get(ENDPOINT_API_POST_USER + `${dataId}`, {
       headers,
     });
     setData(res.data);
@@ -221,12 +222,8 @@ export default function NavigationBar() {
                   </MenuButton>
 
                   <MenuList>
-                    <MenuItem
-                      as={LinkTo}
-                      to={'dashboard/transaksi'}
-                      icon={<RepeatClockIcon />}
-                    >
-                      Riwayat Transaksi
+                    <MenuItem as={LinkTo} to={'/profile'} icon={<EditIcon />}>
+                      Profile
                     </MenuItem>
                     <MenuItem
                       icon={<ArrowBackIcon />}
@@ -242,9 +239,6 @@ export default function NavigationBar() {
                 MASUK
               </Button>
             )}
-            {/* <Button as={LinkTo} to="/masuk" size={'sm'} {...navbarSet}>
-              MASUK
-            </Button> */}
           </Flex>
         </Flex>
       </Container>

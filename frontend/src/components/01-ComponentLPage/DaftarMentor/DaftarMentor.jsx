@@ -13,7 +13,8 @@ import useLoginState from '../../../zustand/todoLogin';
 
 export default function DaftarMentor() {
   const { isLoggedIn } = useLoginState();
-  const color = useColorModeValue('white', 'black');
+  const color = useColorModeValue('black', 'white');
+
   const tauah = useColorModeValue('accentLight.900', 'accentLight.100');
   const bacg = useColorModeValue('accentLight.400', 'accentDark.400');
   const hoverBg = useColorModeValue('accentLight.500', 'accentDark.500');

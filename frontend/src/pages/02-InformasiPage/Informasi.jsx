@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadingFetchEffect from '../../components/02-Reusable/LoadingEffect/LoadingFetchEffect';
+import { ENDPOINT_API_GET_INFORMASI } from '../../api/api';
 
 export default function Informasi() {
   const [informasi, setInformasi] = useState([]);
@@ -17,7 +18,7 @@ export default function Informasi() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/informasi')
+      .get(ENDPOINT_API_GET_INFORMASI)
       .then((res) => {
         setInformasi(res.data);
         setIsLoading(false);
@@ -28,6 +29,7 @@ export default function Informasi() {
   }, []);
 
   const textcolor = useColorModeValue('accentLight.500', 'accentDark.500');
+  const warna = useColorModeValue('black', 'white');
 
   const ContainerInformasi = ({ judul }) => {
     const filteredData = informasi.filter((item) => item.judul === judul);
@@ -77,9 +79,7 @@ export default function Informasi() {
       >
         Informasi
       </Heading>
-      {informasi[0] && (
-        <Text color={'gray.500'}>{informasi[0].keterangan}</Text>
-      )}
+      {informasi[0] && <Text color={warna}>{informasi[0].keterangan}</Text>}
       {informasi.map(({ judul }, index) => (
         <ContainerInformasi key={index} judul={judul} />
       ))}
