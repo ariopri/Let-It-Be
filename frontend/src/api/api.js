@@ -8,3 +8,5 @@ export const ENDPOINT_API_POST_USER = `${BASE_URL}/user/`;
 //MODULE ARTICLE
 export const ENDPOINT_API_GET_INFORMASI = `${BASE_URL}/informasi`;
 export const ENDPOINT_API_GET_FAQ = `${BASE_URL}/faq`;
+export const ENDPOINT_API_GET_MODUL = `${BASE_URL}/modul`;
+export const ENDPOINT_API_GET_MODUL_DETAIL = `${BASE_URL}/detail`;
