@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
 import RoutesOutlet from './utils/RoutesOutlet';
 import LandingPage from './pages/01-LandingPage/LandingPage';
 import Informasi from './pages/02-InformasiPage/Informasi';
@@ -9,7 +9,7 @@ import Register from './pages/07-Daftar/Register';
 import CaraMendafatarPengajar from './pages/08-DaftarPengajar/CaraDaftarPengajar';
 import Protected from './protected/protectedRoute';
 import Login from './pages/06-LoginPage/Login';
-import Siswa from './pages/09-ModulPage/Modul';
+import ModulDetail from './pages/09-ModulDetail/ModulDetail';
 
 function App() {
   return (
@@ -19,9 +19,12 @@ function App() {
         <Route path="informasi" element={<Informasi />} />
         <Route path="hubungi" element={<HubungiKami />} />
         <Route path="tentang" element={<About />} />
-        <Route element={<Protected />}>
-          <Route path="modul" element={<Modul />} />
-          {/* <Route path="modul" element={<Siswa />} /> */}
+
+        <Route path="modul" element={<Outlet />}>
+          <Route index element={<Modul />} />
+          <Route path=":name" element={<Outlet />}>
+            <Route path=":id" element={<ModulDetail />} />
+          </Route>
         </Route>
         <Route path="masuk" element={<Login />} />
         <Route path="mendaftar" element={<Register />} />
