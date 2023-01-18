@@ -1,4 +1,4 @@
-import { StarIcon } from '@chakra-ui/icons';
+import { SearchIcon, StarIcon } from '@chakra-ui/icons';
 import {
   Button,
   Card,
@@ -14,9 +14,13 @@ import {
   Avatar,
   Link,
   Input,
+  useColorModeValue,
+  InputGroup,
+  InputRightElement,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { ENDPOINT_API_GET_MODUL } from '../../api/api';
 import Loading from '../../components/02-Reusable/LoadingEffect/LoadingFetchEffect';
 
 export default function Modul() {
@@ -25,9 +29,12 @@ export default function Modul() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
   const [searchTerm, setSearchTerm] = useState('');
+  const searchstyle = {
+    focusBorderColor: useColorModeValue('accentLight.400', 'accentDark.400'),
+  };
 
   useEffect(() => {
-    axios.get('http://localhost:8080/modul').then((response) => {
+    axios.get(ENDPOINT_API_GET_MODUL).then((response) => {
       setSubjects(response.data[0].subjects);
       setIsLoading(false);
     });
@@ -62,11 +69,26 @@ export default function Modul() {
         <Text color={'gray.500'}>
           Berikut Beberapa Mata Pelajaran Yang Tersedia Di Let It Be
         </Text>
-        <Input
-          placeholder="Cari Kelas..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+
+        <InputGroup>
+          <Input
+            rounded="full"
+            type="text"
+            placeholder="Cari dengan kata kunci apapun disini..."
+            onChange={(e) => setSearchTerm(e.target.value)}
+            {...searchstyle}
+          />
+          <InputRightElement width="4.75rem">
+            <Button
+              rounded="full"
+              type="submit"
+              colorScheme="blue"
+              rightIcon={<SearchIcon />}
+            >
+              Cari
+            </Button>
+          </InputRightElement>
+        </InputGroup>
       </Stack>
       <Flex w="full" justifyContent={'center'} alignItems="center">
         <SimpleGrid
@@ -85,7 +107,6 @@ export default function Modul() {
                 boxShadow={'2xl'}
                 rounded={'md'}
                 overflow={'hidden'}
-                bgGradient={subject.color}
                 _hover={{
                   transform: 'translateY(-5px)',
                   boxShadow: '2xl',

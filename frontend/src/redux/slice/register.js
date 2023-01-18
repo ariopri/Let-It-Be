@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { ENDPOINT_API_POST_REGISTER } from '../../api/api';
 
 //create async thunk
 export const register = createAsyncThunk(
@@ -9,7 +10,7 @@ export const register = createAsyncThunk(
       // set header to specify that the data being sent is in json format
       const config = { headers: { 'Content-Type': 'application/json' } };
       const response = await axios.post(
-        'http://localhost:8080/register',
+        ENDPOINT_API_POST_REGISTER,
         payload,
         config
       );

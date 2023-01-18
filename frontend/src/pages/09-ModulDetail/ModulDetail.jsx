@@ -2,16 +2,20 @@ import {
   Box,
   Container,
   Flex,
+  Heading,
   List,
   ListItem,
   Stack,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { VscPlayCircle } from 'react-icons/vsc';
 import { useParams } from 'react-router-dom';
 import YouTube from 'react-youtube';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import Loading from '../../components/02-Reusable/LoadingEffect/LoadingFetchEffect';
+import { ENDPOINT_API_GET_MODUL_DETAIL } from '../../api/api';
 
 export default function ModulDetail() {
   const { name, id } = useParams();
@@ -21,7 +25,8 @@ export default function ModulDetail() {
   const isDesktop = window.innerWidth >= 992;
   const isTablet = window.innerWidth >= 768 && window.innerWidth < 992;
   const isMobile = window.innerWidth < 768;
-
+  const color = useColorModeValue('white', 'dark');
+  const color2 = useColorModeValue('white', 'dark');
   const opts = {
     playerVars: {
       autoplay: 1,
@@ -41,7 +46,7 @@ export default function ModulDetail() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/detail')
+      .get(ENDPOINT_API_GET_MODUL_DETAIL)
       .then((response) => {
         const data = response.data;
         const currentModul = data[0].pelajaran.find(
@@ -58,6 +63,10 @@ export default function ModulDetail() {
         console.log(error);
       });
   }, [id, name]);
+
+  if (!currentVideo) {
+    return <Loading />;
+  }
 
   return (
     <Container maxW={'7xl'}>
@@ -81,7 +90,10 @@ export default function ModulDetail() {
         </Flex>
 
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
-          <Text color={'gray.500'}>{description}</Text>
+          <Heading fontSize={{ base: 'xl', md: '2xl', lg: '3xl' }}>
+            {description}
+          </Heading>
+
           <Stack
             spacing={{ base: 4, sm: 6 }}
             direction={{ base: 'column', sm: 'row' }}
@@ -95,7 +107,6 @@ export default function ModulDetail() {
                       p={2}
                       cursor="pointer"
                       onClick={() => setCurrentVideo(video)}
-                      _hover={{ bg: 'gray.100' }}
                     >
                       <Box mr={2}>
                         {currentVideo === video ? (
@@ -117,7 +128,7 @@ export default function ModulDetail() {
                         />
                       </Box>
                       <Text
-                        color={currentVideo === video ? 'blue.500' : 'black'}
+                        color={currentVideo === video ? { color } : { color2 }}
                         fontWeight={currentVideo === video ? 'bold' : 'normal'}
                       >
                         {video.judul}

@@ -11,15 +11,16 @@ import {
 } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
 import { Link as LinkTo } from 'react-router-dom';
-import { BASE_URL } from '../../../api/api';
+import { ENDPOINT_API_POST_USER } from '../../../api/api';
 import useLoginState from '../../../zustand/todoLogin';
 import axios from 'axios';
 import { useEffect } from 'react';
 
 export default function Hero() {
   const { isLoggedIn, dataId } = useLoginState();
-  const [user, setUser] = useState({});
+  const [, setUser] = useState({});
   const color = useColorModeValue('black', 'white');
+
   const bacg = useColorModeValue('accentLight.400', 'accentDark.400');
   const hoverBg = useColorModeValue('accentLight.500', 'accentDark.500');
 
@@ -27,7 +28,7 @@ export default function Hero() {
     const headers = {
       Authorization: 'Bearer ' + localStorage.getItem('tokenId'),
     };
-    const res = await axios.get(`${BASE_URL}/${dataId}`, {
+    const res = await axios.get(ENDPOINT_API_POST_USER + `${dataId}`, {
       headers,
     });
     setUser(res.data);
@@ -66,7 +67,7 @@ export default function Hero() {
                   dataId.nama_belakang.slice(1)
                 }`}
               </Text>
-              <Text fontSize={'md'} color={color} align="justify">
+              <Text fontSize={'md'} color={color} align="justify" pt={6}>
                 Let It Be Akan Membantumu Mempersiapkan Diri Untuk Masuk
                 Perguruan Tinggi Impian Mu.
               </Text>

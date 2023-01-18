@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import { Toast } from '../../components/02-Reusable/Toast/Toast';
 import axios from 'axios';
 import useLoginState from '../../zustand/todoLogin';
+import { ENDPOINT_API_POST_LOGIN } from '../../api/api';
 
 export default function Login(props) {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ export default function Login(props) {
     };
 
     await axios
-      .post('http://localhost:8080/login', user, {
+      .post(ENDPOINT_API_POST_LOGIN, user, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -214,7 +215,7 @@ export default function Login(props) {
                 <Stack spacing={6}>
                   <Button
                     type="submit"
-                    color={useColorModeValue('white', 'black')}
+                    color={useColorModeValue('black', 'white')}
                     bg={useColorModeValue('accentLight.400', 'accentDark.400')}
                     _hover={{
                       bg: useColorModeValue(

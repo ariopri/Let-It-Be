@@ -13,14 +13,13 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { ENDPOINT_API_GET_FAQ } from '../../../api/api';
 
 export default function Faq() {
   const [faq, setFaq] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get(
-        'https://6382a6221ada9475c8f10b2d.mockapi.io/FAQ'
-      );
+      const result = await axios.get(ENDPOINT_API_GET_FAQ);
       setFaq(result.data);
     };
     fetchData();

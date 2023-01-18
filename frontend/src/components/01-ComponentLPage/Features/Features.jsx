@@ -6,8 +6,8 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  Image,
   Avatar,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import useLoginState from '../../../zustand/todoLogin';
 
@@ -44,6 +44,7 @@ const subjectList = [
 
 export default function Features() {
   const { isLoggedIn } = useLoginState();
+  const color = useColorModeValue('black', 'white');
   return isLoggedIn ? (
     <Stack
       as={Container}
@@ -51,14 +52,15 @@ export default function Features() {
       spacing={10}
       py={10}
       data-aos="fade-up"
-      mt={10}
+      pt={10}
+      pb={10}
     >
       <Stack maxW="lg" textAlign="center" alignSelf="center" data-aos="fade-up">
         <Heading fontSize={{ base: 'xl', md: '2xl', lg: '3xl' }}>
           Daftar Kelas
         </Heading>
-        <Text color={'gray.500'}>
-          Beriku Beberapa Mata Pelajaran Yang Tersedia Di Let It Be
+        <Text color={color}>
+          Berikut Beberapa Mata Pelajaran Yang Tersedia Di Let It Be
         </Text>
       </Stack>
       <Flex w="full" justifyContent={'center'} alignItems="center">
@@ -67,6 +69,7 @@ export default function Features() {
           columns={{ base: 2, xl: 4 }}
           spacing={4}
           color={'white'}
+          pb={10}
         >
           {subjectList.map((subject, index) => (
             <Stack
@@ -89,7 +92,7 @@ export default function Features() {
               <Text
                 fontSize={{ base: '18', md: '24' }}
                 fontWeight="500"
-                color={'black'}
+                color={color}
                 textAlign={'center'}
               >
                 {subject.name}
@@ -121,7 +124,7 @@ export default function Features() {
           w={'full'}
           columns={{ base: 2, xl: 4 }}
           spacing={4}
-          color={'white'}
+          color={color}
         >
           <Stack
             justify={'space-between'}
@@ -151,7 +154,7 @@ export default function Features() {
               #2
             </Text>
             <Text fontSize={{ base: '18', md: '24' }} fontWeight="500">
-              Materi Terlengkap
+              Bebas Pilih Mentor
             </Text>
             <Box mt={'auto'} w="100%" h={0.9} bg={'white'} />
           </Stack>
@@ -167,7 +170,7 @@ export default function Features() {
               #3
             </Text>
             <Text fontSize={{ base: '18', md: '24' }} fontWeight="500">
-              Materi Terlengkap
+              Dapat diakses dimana saja
             </Text>
             <Box mt={'auto'} w="100%" h={0.9} bg={'white'} />
           </Stack>
@@ -183,7 +186,7 @@ export default function Features() {
               #4
             </Text>
             <Text fontSize={{ base: '18', md: '24' }} fontWeight="500">
-              Materi Terlengkap
+              Gratis
             </Text>
             <Box mt={'auto'} w="100%" h={0.9} bg={'white'} />
           </Stack>
