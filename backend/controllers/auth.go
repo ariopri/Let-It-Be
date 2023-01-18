@@ -131,10 +131,10 @@ func Login(c *gin.Context) {
 	}
 	//if user is valid, return token
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Berhasil Login",
-		"token":   token,
-		"UserId":  userID,
-		"dataId":  dataUser,
+
+		"token":  token,
+		"UserId": userID,
+		"dataId": dataUser,
 	})
 }
 
