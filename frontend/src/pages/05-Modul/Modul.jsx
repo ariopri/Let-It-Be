@@ -4,10 +4,8 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
   Heading,
   Box,
-  Image,
   SimpleGrid,
   Stack,
   Text,
@@ -15,67 +13,85 @@ import {
   Flex,
   Avatar,
   Link,
+  Input,
 } from '@chakra-ui/react';
-
-const subjects = [
-  {
-    name: 'Math',
-    image:
-      'https://storage.googleapis.com/kelase-files/kelas/66febcac2adea8f98db0064dd2f8a592.png',
-    description: 'Learn about the natural world and how it works.',
-    teacher: 'Mr. Smith',
-    rating: 4,
-    color: 'linear(to-b, rgba(246, 92, 139, 1), rgba(246, 92, 139, 1))',
-  },
-  {
-    name: 'Math',
-    image:
-      'https://storage.googleapis.com/kelase-files/kelas/66febcac2adea8f98db0064dd2f8a592.png',
-    description: 'Study numbers, quantities, and shapes.',
-    rating: 3,
-    teacher: 'Mr. John',
-    color: 'linear(to-b, rgba(158, 138, 252, 1), rgba(158, 138, 252, 1))',
-  },
-  {
-    name: 'Math',
-    image:
-      'https://storage.googleapis.com/kelase-files/kelas/66febcac2adea8f98db0064dd2f8a592.png',
-    description: 'Explore the properties and behavior of matter.',
-    rating: 5,
-    teacher: 'Mr. Alex',
-    color: 'linear(to-b, rgba(97, 210, 242, 1), rgba(97, 210, 242, 1))',
-  },
-];
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import Loading from '../../components/02-Reusable/LoadingEffect/LoadingFetchEffect';
 
 export default function Modul() {
-  return (
-    <Link href={`/modul/${subjects.name}`}>
-      <Stack
-        onClick={() => {}}
-        as={Container}
-        maxW={'7xl'}
-        spacing={10}
-        py={10}
-        data-aos="fade-up"
-        mt={10}
-      >
-        <Stack
-          maxW="lg"
-          textAlign="center"
-          alignSelf="center"
-          data-aos="fade-up"
+  const [subjects, setSubjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/modul').then((response) => {
+      setSubjects(response.data[0].subjects);
+      setIsLoading(false);
+    });
+  }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentSubjects = subjects
+    .filter(
+      (subject) =>
+        subject.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        subject.description.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .slice(indexOfFirstItem, indexOfLastItem);
+
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <Stack
+      onClick={() => {}}
+      as={Container}
+      maxW={'7xl'}
+      spacing={10}
+      py={10}
+      mt={10}
+      data-aos="fade-up"
+    >
+      <Stack maxW="lg" textAlign="center" alignSelf="center">
+        <Heading fontSize={{ base: 'xl', md: '2xl', lg: '3xl' }}>
+          Daftar Kelas
+        </Heading>
+        <Text color={'gray.500'}>
+          Berikut Beberapa Mata Pelajaran Yang Tersedia Di Let It Be
+        </Text>
+        <Input
+          placeholder="Cari Kelas..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </Stack>
+      <Flex w="full" justifyContent={'center'} alignItems="center">
+        <SimpleGrid
+          w={'full'}
+          columns={{ base: 2, xl: 4 }}
+          spacing={4}
+          mb={'10px'}
+          mt={'10px'}
         >
-          <Heading fontSize={{ base: 'xl', md: '2xl', lg: '3xl' }}>
-            Daftar Kelas
-          </Heading>
-          <Text color={'gray.500'}>
-            Beriku Beberapa Mata Pelajaran Yang Tersedia Di Let It Be
-          </Text>
-        </Stack>
-        <Flex w="full" justifyContent={'center'} alignItems="center">
-          <SimpleGrid w={'full'} columns={{ base: 2, xl: 5 }} spacing={4}>
-            {subjects.map((subject, i) => (
-              <Card key={i}>
+          {currentSubjects.map((subject, i) =>
+            subject.classes.map((classses, index) => (
+              <Card
+                key={classses.id}
+                data-aos="fade-up"
+                w={'full'}
+                boxShadow={'2xl'}
+                rounded={'md'}
+                overflow={'hidden'}
+                bgGradient={subject.color}
+                _hover={{
+                  transform: 'translateY(-5px)',
+                  boxShadow: '2xl',
+                }}
+                transition={'all .3s ease'}
+              >
                 <Avatar
                   width={'100px'}
                   alignSelf={'center'}
@@ -83,34 +99,74 @@ export default function Modul() {
                   height={'100px'}
                   src={subject.image}
                 />
-                <CardBody>
+                <CardBody textAlign={'center'}>
                   <Heading as="h4" size="md">
-                    {subject.name}
-                    <Text>{subject.teacher}</Text>
+                    {subject.name.charAt(0).toUpperCase() +
+                      subject.name.slice(1)}
                   </Heading>
                   <Text>{subject.description}</Text>
+                  <Text>{classses.teacher}</Text>
+                  <CardBody>
+                    <Flex alignItems="center" justifyContent="center">
+                      <Stack isInline align="center">
+                        {[...Array(5)].map((star, i) => {
+                          const ratingValue = i + 1;
+                          return (
+                            <StarIcon
+                              key={i}
+                              color={
+                                ratingValue <= classses.rating
+                                  ? 'orange'
+                                  : 'gray'
+                              }
+                            />
+                          );
+                        })}
+                        <Text>{classses.rating}</Text>
+                      </Stack>
+                    </Flex>
+                  </CardBody>
                 </CardBody>
                 <CardFooter>
-                  <Stack isInline align="center">
-                    {[...Array(5)].map((star, i) => {
-                      const ratingValue = i + 1;
-                      return (
-                        <StarIcon
-                          key={i}
-                          color={
-                            ratingValue <= subject.rating ? 'orange' : 'gray'
-                          }
-                        />
-                      );
-                    })}
-                    <Text>{subject.rating}/5</Text>
-                  </Stack>
+                  <Button
+                    as={Link}
+                    href={`modul/${subject.name}/${classses.id}`}
+                    variantColor={'teal'}
+                    size={'md'}
+                    m={'auto'}
+                  >
+                    Lihat Kelas
+                  </Button>
                 </CardFooter>
               </Card>
-            ))}
-          </SimpleGrid>
-        </Flex>
-      </Stack>
-    </Link>
+            ))
+          )}
+        </SimpleGrid>
+      </Flex>
+      <Box
+        as="nav"
+        textAlign="center"
+        py={4}
+        display={{ base: 'block', md: 'flex' }}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          variantColor="teal"
+          mr={3}
+        >
+          Previous
+        </Button>
+        <Button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentSubjects.length < itemsPerPage}
+          variantColor="teal"
+        >
+          Next
+        </Button>
+      </Box>
+    </Stack>
   );
 }
