@@ -51,7 +51,7 @@ export default function Event() {
                 borderRadius="lg"
               />
               <Stack mt="6" spacing="3">
-                <Heading size="md">Try Out Utbk 2022</Heading>
+                <Heading size="md">Try Out Utbk 2023</Heading>
                 <Text>
                   Ayo ikuti try out utbk 2022 untuk mengetahui kemampuan kamu
                   dalam menghadapi UTBK 2023 nanti dan dapatkan hadiah menarik
