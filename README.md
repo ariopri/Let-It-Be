@@ -1,5 +1,5 @@
 <!-- PROJECT LOGO -->
-<h1 align="center">Hiking<h1>
+<h1 align="center">Let It Be<h1>
 <br />
 <p align="center">
   <a href="https://github.com/ariopri/MacroProject-Hiking">
