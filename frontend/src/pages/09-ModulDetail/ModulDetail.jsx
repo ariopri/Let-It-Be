@@ -26,23 +26,14 @@ export default function ModulDetail() {
   const isTablet = window.innerWidth >= 768 && window.innerWidth < 992;
   const isMobile = window.innerWidth < 768;
   const color = useColorModeValue('white', 'dark');
-  const color2 = useColorModeValue('white', 'dark');
   const opts = {
     playerVars: {
       autoplay: 1,
     },
   };
 
-  if (isDesktop) {
-    opts.width = '640';
-    opts.height = '390';
-  } else if (isTablet) {
-    opts.width = '480';
-    opts.height = '270';
-  } else if (isMobile) {
-    opts.width = '380';
-    opts.height = '200';
-  }
+  opts.width = isDesktop ? '640' : isTablet ? '480' : isMobile ? '380' : '';
+  opts.height = isDesktop ? '390' : isTablet ? '270' : isMobile ? '200' : '';
 
   useEffect(() => {
     axios
@@ -128,7 +119,7 @@ export default function ModulDetail() {
                         />
                       </Box>
                       <Text
-                        color={currentVideo === video ? { color } : { color2 }}
+                        color={currentVideo === video ? { color } : { color }}
                         fontWeight={currentVideo === video ? 'bold' : 'normal'}
                       >
                         {video.judul}
