@@ -16,7 +16,7 @@
 
 ##### See here for the results
 
-Website => [https://perkedel-hiking.netlify.app/](https://perkedel-hiking.netlify.app/)
+Website => [https://letitbe.netlify.app/](https://letitbe.netlify.app/)
 
 <!-- TABLE OF CONTENTS -->
 
