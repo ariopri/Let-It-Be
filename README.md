@@ -6,12 +6,11 @@
     <img src="./frontend/public/image/logo.svg" alt="Logo" width="200" height="80">
   </a>
 
-  <h3 align="center">We were founded on the idea 
-that nature should connect people no matter where you are
+  <h3 align="center">Tempat Mengajar dan Belajar Untuk Persiapan UTBK
 </h3>
 
   <p align="center">
-    <strong>Let It Be</strong> is a cross-device and multi-platform web application that is useful for climbers in choosing the desired mountain by displaying conditions about the mountain, equipment to bring, and so on. Let's use  to get information about mountain in Indonesia. Join us now!
+    <strong>Let It Be</strong> adalah sebuah Learning Management System (LMS) bagi para siswa kelas 12 ataupun siswa gapyear untuk belajar dalam persiapan masuk perguruan tinggi. Para siswa akan dapat belajar dengan memilih dan menyesuaikan mentor atau pengajar yang sesuai dengan karakteristik belajarnya masing-masing. Para siswa juga dapat untuk belajar kapanpun dan dimanapun sesuai keinginan dan yang terpenting adalah <strong>Gratisss..</strong>
 
 </p>
 
@@ -23,48 +22,101 @@ Website => [https://perkedel-hiking.netlify.app/](https://perkedel-hiking.netlif
 
 ## Table of Contents
 
-- [Built With](#built-with)
-- [Getting Started](#getting-started)
-- [Deploy at](#deploy-at)
+- ⚙️ [Backend](#backend)
 
-### Deploy at
+  - [Teknologi Backend](#teknologi-backend)
+  - [Development Backend](#development-backend)
 
-frontend (Netlify)
+- 🖼 [Frontend](#frontend)
+  - [Teknologi Frontend](#teknologi-frontend)
+  - [Package Penting](#package-penting)
+  - [Development Frontend](#development-frontend)
+- 😎 [Anggota Kelompok](#anggota-kelompok)
 
-### Built With
+---
 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+## Backend
 
-- [React js](https://reactjs.org/)
-- [Golang](https://go.dev/)
-- [Bootstrap CSS](https://getbootstrap.com/)
-- [Axios](https://axios-http.com/docs/intro)
-- [Zustand](https://github.com/pmndrs/zustand)
+Buka terminal favorit kalian dan jalankan perintah-perintah berikut ini. Selain itu juga disediakan _build version_ berupa file exe.
 
-<!-- GETTING STARTED -->
+### 📚 Teknologi Backend
 
-### Getting Started [Bash]
+- Golang
+- Gin Gonic
+- JWT-GO
+- Docker
+- Mysql
 
-1. Clone the repo
+### 🛠 Development Backend
 
-```sh
-git@github.com:ariopri/MacroProject-Hiking.git
+Untuk menjalankan Project Backend:
+
+buat databasenya terlebih dahulu yang bernama letitbe dengan membuka terminal lalu ketikan
+
+```bash
+mysql -u root -p
 ```
 
-3. Go to frontend
+setelah itu masukan password masing-masing, lalu
 
-```sh
-cd frontend/
+```bash
+create database letitbe;
 ```
 
-4. Install YARN packages
+go to directory backend
 
-```sh
-yarn
+```bash
+cd backend/
 ```
 
-5. Starting
-
-```JS
-yarn run dev
+```bash
+go run main.go
 ```
+
+## Frontend
+
+Berikut ini adalah panduan instalasi hingga cara menjalankan local development pada Project Frontend.
+
+### 📚 Teknologi Frontend
+
+- React-js
+- Axios
+- Chakra UI
+- Emotion
+- Zustand
+- Redux
+
+### 📦 Package Penting
+
+Ada 2 package/library penting yang digunakan disini, yaitu:
+
+- Chakra UI
+- Axios
+- Yarn
+
+### 🛠 Development Frontend
+
+untuk menjalankanya pastikan terlebih dahulu telah memiliki yarn
+
+```bash
+npm install yarn
+```
+
+**react-js**
+
+```bash
+yarn install
+```
+
+setelah itu
+
+```bash
+yarn start
+```
+
+Kemudian periksa url http://localhost:3000 pada browser untuk melihat hasilnya.
+
+## Anggota Kelompok
+
+- Ario Prima - Coder 👨‍💻
+- Alifah Rumaishah Indi- Hustler 👨‍💻
