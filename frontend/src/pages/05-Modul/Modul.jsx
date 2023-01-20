@@ -32,6 +32,13 @@ export default function Modul() {
   const searchstyle = {
     focusBorderColor: useColorModeValue('accentLight.400', 'accentDark.400'),
   };
+  const buttonStyle = {
+    color: useColorModeValue('white', 'black'),
+    bg: useColorModeValue('accentLight.400', 'accentDark.400'),
+    _hover: {
+      bg: useColorModeValue('accentLight.500', 'accentDark.500'),
+    },
+  };
 
   useEffect(() => {
     axios.get(ENDPOINT_API_GET_MODUL).then((response) => {
@@ -84,6 +91,7 @@ export default function Modul() {
               type="submit"
               colorScheme="blue"
               rightIcon={<SearchIcon />}
+              {...buttonStyle}
             >
               Cari
             </Button>
@@ -155,6 +163,7 @@ export default function Modul() {
                     variantColor={'teal'}
                     size={'md'}
                     m={'auto'}
+                    {...buttonStyle}
                   >
                     Lihat Kelas
                   </Button>
@@ -177,6 +186,7 @@ export default function Modul() {
           disabled={currentPage === 1}
           variantColor="teal"
           mr={3}
+          {...buttonStyle}
         >
           Previous
         </Button>
@@ -184,6 +194,7 @@ export default function Modul() {
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentSubjects.length < itemsPerPage}
           variantColor="teal"
+          {...buttonStyle}
         >
           Next
         </Button>

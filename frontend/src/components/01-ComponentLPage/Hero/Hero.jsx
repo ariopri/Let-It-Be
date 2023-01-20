@@ -19,8 +19,8 @@ import { useEffect } from 'react';
 export default function Hero() {
   const { isLoggedIn, dataId } = useLoginState();
   const [, setUser] = useState({});
-  const color = useColorModeValue('black', 'white');
-
+  const color = useColorModeValue('white', 'black');
+  const color2 = useColorModeValue('black', 'white');
   const bacg = useColorModeValue('accentLight.400', 'accentDark.400');
   const hoverBg = useColorModeValue('accentLight.500', 'accentDark.500');
 
@@ -67,7 +67,7 @@ export default function Hero() {
                   dataId.nama_belakang.slice(1)
                 }`}
               </Text>
-              <Text fontSize={'md'} color={color} align="justify" pt={6}>
+              <Text fontSize={'md'} color={color2} align="justify" pt={6}>
                 Let It Be Akan Membantumu Mempersiapkan Diri Untuk Masuk
                 Perguruan Tinggi Impian Mu.
               </Text>

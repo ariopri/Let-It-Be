@@ -7,7 +7,6 @@ import {
   Stack,
   Text,
   Avatar,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import useLoginState from '../../../zustand/todoLogin';
 
@@ -44,7 +43,6 @@ const subjectList = [
 
 export default function Features() {
   const { isLoggedIn } = useLoginState();
-  const color = useColorModeValue('black', 'white');
   return isLoggedIn ? (
     <Stack
       as={Container}
@@ -59,7 +57,7 @@ export default function Features() {
         <Heading fontSize={{ base: 'xl', md: '2xl', lg: '3xl' }}>
           Daftar Kelas
         </Heading>
-        <Text color={color}>
+        <Text color={'white'}>
           Berikut Beberapa Mata Pelajaran Yang Tersedia Di Let It Be
         </Text>
       </Stack>
@@ -92,7 +90,7 @@ export default function Features() {
               <Text
                 fontSize={{ base: '18', md: '24' }}
                 fontWeight="500"
-                color={color}
+                color={'white'}
                 textAlign={'center'}
               >
                 {subject.name}
@@ -124,7 +122,7 @@ export default function Features() {
           w={'full'}
           columns={{ base: 2, xl: 4 }}
           spacing={4}
-          color={color}
+          color={'white'}
         >
           <Stack
             justify={'space-between'}

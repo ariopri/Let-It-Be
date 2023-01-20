@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function Daftar() {
-  const color = useColorModeValue('black', 'white');
+  const color = useColorModeValue('white', 'black');
   const bg = useColorModeValue('accentLight.400', 'accentDark.400');
   const hoverBg = useColorModeValue('accentLight.500', 'accentDark.500');
   const isLoading = useSelector((state) => state.register.isLoading);
