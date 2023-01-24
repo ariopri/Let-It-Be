@@ -33,14 +33,7 @@ export default function Login(props) {
     useLoginState();
   const [passwordType, setPasswordType] = useState(false);
 
-  const handleTts = () => {
-    const ttsText = `Selamat Datang  ${dataId.nama_depan}`;
-    const speech = new SpeechSynthesisUtterance(ttsText);
-    speech.voice = speechSynthesis
-      .getVoices()
-      .filter((voice) => voice.name === 'Google UK English Female')[0];
-    speechSynthesis.speak(speech);
-  };
+
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -71,7 +64,7 @@ export default function Login(props) {
         setToken(accessToken);
         localStorage.setItem('token', accessToken);
         setIsLoggedIn(true);
-        handleTts();
+        
       })
       .catch((error) => {
         Toast.fire({
