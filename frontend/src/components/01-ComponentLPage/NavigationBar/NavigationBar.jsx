@@ -107,18 +107,10 @@ export default function NavigationBar() {
     setData(res.data);
   }, [dataId]);
 
-  const handleTts = () => {
-    const ttsText = `Selamat Datang  ${dataId.nama_depan}`;
-    const speech = new SpeechSynthesisUtterance(ttsText);
-    speech.voice = speechSynthesis
-      .getVoices()
-      .filter((voice) => voice.name === 'Google UK English Female')[0];
-    speechSynthesis.speak(speech);
-  };
+ 
   useEffect(() => {
     if (isLoggedIn) {
       getData();
-      handleTts();
     }
   }, [isLoggedIn, getData]);
 
